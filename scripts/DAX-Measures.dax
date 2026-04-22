@@ -1,0 +1,100 @@
+// ============================================================================
+// DAX-Measures.dax
+// ----------------------------------------------------------------------------
+// How to use:
+//   1. In Power BI Desktop, on the Home ribbon click: Enter data
+//   2. Leave the table empty, name it  _Measures , click Load
+//      (The leading underscore keeps it pinned to the top of the Fields pane.)
+//   3. For EACH block below:
+//        - Right-click the _Measures table -> New measure
+//        - Paste ONE block (name + equals sign + formula)
+//        - Press Enter
+//   4. After all measures are created, you can delete the dummy "Column1"
+//      from the _Measures table.
+//
+// The "Total Price" calculated column at the bottom lives on the Users table,
+// NOT on _Measures. Instructions are inline.
+// ============================================================================
+
+
+// ---------------------------------------------------------------------------
+// 1) Total Billable  (the CFO's headline number)
+//    Filter-aware invoice total. Respects Company / Status slicers.
+// ---------------------------------------------------------------------------
+Total Billable =
+    CALCULATE (
+        SUMX (
+            Users,
+            COALESCE ( Users[Price1], 0 ) + COALESCE ( Users[Price2], 0 )
+        ),
+        Users[Status] = "Active"
+    )
+
+
+// ---------------------------------------------------------------------------
+// 2) Active Users
+// ---------------------------------------------------------------------------
+Active Users =
+    CALCULATE ( COUNTROWS ( Users ), Users[Status] = "Active" )
+
+
+// ---------------------------------------------------------------------------
+// 3) Inactive Users  (retained but not billed)
+// ---------------------------------------------------------------------------
+Inactive Users =
+    CALCULATE ( COUNTROWS ( Users ), Users[Status] = "Inactive" )
+
+
+// ---------------------------------------------------------------------------
+// 4) Total Licenses  (counts Product1 + Product2 per Active user)
+// ---------------------------------------------------------------------------
+Total Licenses =
+    SUMX (
+        FILTER ( Users, Users[Status] = "Active" ),
+        ( IF ( NOT ISBLANK ( Users[Product1] ), 1, 0 ) )
+      + ( IF ( NOT ISBLANK ( Users[Product2] ), 1, 0 ) )
+    )
+
+
+// ---------------------------------------------------------------------------
+// 5) Avg Cost per Active User
+// ---------------------------------------------------------------------------
+Avg Cost per Active User =
+    DIVIDE ( [Total Billable], [Active Users] )
+
+
+// ---------------------------------------------------------------------------
+// 6) Companies Billed  (distinct sub-companies with at least one Active user)
+// ---------------------------------------------------------------------------
+Companies Billed =
+    CALCULATE ( DISTINCTCOUNT ( Users[Company] ), Users[Status] = "Active" )
+
+
+// ---------------------------------------------------------------------------
+// 7) License Utilization %  (requires Last Login Date column)
+//    Share of Active users who logged in within the last 30 days.
+//    Format the measure as Percentage, 1 decimal place.
+// ---------------------------------------------------------------------------
+License Utilization % =
+    DIVIDE (
+        CALCULATE (
+            [Active Users],
+            Users[Last Login Date] >= TODAY () - 30
+        ),
+        [Active Users]
+    )
+
+
+// ---------------------------------------------------------------------------
+// 8) Report As Of  (small text label for the report header)
+// ---------------------------------------------------------------------------
+Report As Of = "Report as of " & FORMAT ( TODAY (), "mmmm d, yyyy" )
+
+
+// ===========================================================================
+// CALCULATED COLUMN (goes on the Users table, NOT on _Measures)
+// ---------------------------------------------------------------------------
+// In the Fields pane, right-click the Users table -> New column, then paste:
+// ===========================================================================
+
+Total Price = COALESCE ( Users[Price1], 0 ) + COALESCE ( Users[Price2], 0 )

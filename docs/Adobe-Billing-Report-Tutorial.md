@@ -17,12 +17,50 @@ Take your time. If a step looks unfamiliar, pause and re-read — you are learni
 ## Table of Contents
 
 1. [Before You Start](#0-before-you-start)
-2. [Part 1 — Data Prep (Power Query)](#part-1--data-prep-power-query)
-3. [Part 2 — Data Modeling (Calculations)](#part-2--data-modeling-calculations)
-4. [Part 3 — Visual Design (The Dashboard)](#part-3--visual-design-the-dashboard)
-5. [Part 4 — Publish, Share, and Refresh](#part-4--publish-share-and-refresh)
-6. [Appendix A — Professional Add-on Columns](#appendix-a--professional-add-on-columns)
-7. [Appendix B — Full DAX Reference](#appendix-b--full-dax-reference)
+2. [Fast Path — Paste-and-Go (10 minutes)](#fast-path--paste-and-go-10-minutes)
+3. [Part 1 — Data Prep (Power Query)](#part-1--data-prep-power-query)
+4. [Part 2 — Data Modeling (Calculations)](#part-2--data-modeling-calculations)
+5. [Part 3 — Visual Design (The Dashboard)](#part-3--visual-design-the-dashboard)
+6. [Part 4 — Publish, Share, and Refresh](#part-4--publish-share-and-refresh)
+7. [Appendix A — Professional Add-on Columns](#appendix-a--professional-add-on-columns)
+8. [Appendix B — Full DAX Reference](#appendix-b--full-dax-reference)
+
+---
+
+## Fast Path — Paste-and-Go (10 minutes)
+
+> A `.pbix` file is a proprietary binary produced by Power BI Desktop, so it cannot be generated outside the tool. Instead, this repo ships **ready-to-paste scripts** that rebuild the entire model for you. Most users finish this Fast Path in under 10 minutes. If you prefer to understand each click, skip this section and follow Parts 1–3 in order.
+
+### Files you need from this repo
+| File | What it's for |
+|------|---------------|
+| [`templates/adobe-users-blank-template.csv`](../templates/adobe-users-blank-template.csv) | Empty template — open in Excel, replace the sample row with your Adobe export data, save. |
+| [`templates/adobe-users-template.csv`](../templates/adobe-users-template.csv) | Pre-filled sample data (10 rows across 3 sub-companies). Use this to preview the report first. |
+| [`scripts/PowerQuery-Users.m`](../scripts/PowerQuery-Users.m) | Paste into a Blank Query -> builds the `Users` table, splits Name, sets types. |
+| [`scripts/PowerQuery-BillingHeader.m`](../scripts/PowerQuery-BillingHeader.m) | Paste into a Blank Query -> builds the disconnected `BillingHeader` table. |
+| [`scripts/DAX-Measures.dax`](../scripts/DAX-Measures.dax) | All KPI measures + the `Total Price` calculated column, with copy-paste blocks. |
+
+### Steps
+1. **Download the blank CSV**, open it in Excel, paste your Adobe user rows under the headers, and save. When you later export users from the Adobe Admin Console (**Users → ... → Export users list to CSV**), copy the Adobe export columns into this template so the schema stays consistent.
+2. **Open Power BI Desktop** and save an empty `.pbix` file (e.g. `Adobe-License-Billing.pbix`).
+3. **Create the Users table:**
+   - **Home → Get data → Blank Query.**
+   - **Home → Advanced Editor.**
+   - Delete the placeholder text, paste the contents of `PowerQuery-Users.m`, change the `SourcePath` line to point at your CSV, click **Done**.
+   - Rename the query to **`Users`** in the right-hand pane.
+4. **Create the BillingHeader table:**
+   - **Home → Get data → Blank Query → Advanced Editor.**
+   - Paste `PowerQuery-BillingHeader.m`, update the four static values (Contract ID, Billing Contact, Due Date, Payment Method), click **Done**.
+   - Rename the query to **`BillingHeader`**.
+5. **Load the data:** **Home → Close & Apply.**
+6. **Create the measures table:** **Home → Enter data**, leave the grid empty, name it `_Measures`, **Load**.
+7. **Paste each DAX block** from `DAX-Measures.dax`:
+   - Right-click `_Measures` → **New measure** → paste one block → Enter. Repeat for each measure.
+   - For the **`Total Price` calculated column**, right-click the **`Users`** table → **New column** → paste the column formula at the bottom of the file.
+8. **Build the visuals** using the layout in [Part 3](#part-3--visual-design-the-dashboard) — the data model is done, you just drag fields onto cards, slicers, and a matrix.
+9. **Save.** You now have the same `.pbix` outcome a manual build would produce, but reproducible and source-controlled.
+
+> If a paste step fails, the most common cause is a pasted curly quote (`"`) from a rich-text editor. Re-paste from the raw file in this repo and you should be clear.
 
 ---
 
