@@ -1,0 +1,11 @@
+Name,Email,ID type,Status,Company,Product1,Price1,Product2,Price2,Last Login Date,Department,Notes
+Adriana Jimenez,adriana.jimenez@unicare247.com,Adobe ID,Active,Unicare 247,Acrobat Pro,23.99,,,2026-04-18,Operations,Primary PDF reviewer
+Marcus Chen,marcus.chen@unicare247.com,Adobe ID,Active,Unicare 247,Creative Cloud All Apps,59.99,Acrobat Pro,23.99,2026-04-20,Marketing,Dual-license for video + PDF workflow
+Priya Natarajan,priya.natarajan@helix-biotech.com,Federated ID,Active,Helix Biotech,Acrobat Pro,23.99,,,2026-04-21,Legal,Contracts team lead
+Jordan Williams,jordan.williams@helix-biotech.com,Federated ID,Inactive,Helix Biotech,,,,,2026-01-05,Finance,Offboarded 2026-02-12; retained for audit
+Sofia Rossi,sofia.rossi@northstar-logistics.com,Adobe ID,Active,Northstar Logistics,Acrobat Pro,23.99,,,2026-04-19,Finance,
+Daniel Okafor,daniel.okafor@northstar-logistics.com,Adobe ID,Active,Northstar Logistics,Creative Cloud All Apps,59.99,,,2026-04-17,Marketing,Brand lead
+Hannah Becker,hannah.becker@unicare247.com,Federated ID,Active,Unicare 247,Acrobat Pro,23.99,Adobe Sign,14.99,2026-04-21,HR,E-signature admin
+Liam O'Connor,liam.oconnor@helix-biotech.com,Adobe ID,Inactive,Helix Biotech,Acrobat Pro,23.99,,,2025-11-30,R&D,Retained for legal archive - do not delete
+Yuki Tanaka,yuki.tanaka@northstar-logistics.com,Federated ID,Active,Northstar Logistics,Creative Cloud All Apps,59.99,Acrobat Pro,23.99,2026-04-20,Design,Creative director
+Ethan Patel,ethan.patel@unicare247.com,Adobe ID,Active,Unicare 247,Acrobat Pro,23.99,,,2026-04-15,IT,
